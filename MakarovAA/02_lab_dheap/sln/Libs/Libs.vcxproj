@@ -84,6 +84,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,8 +116,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\MyExepction.h" />
+    <ClInclude Include="..\..\include\WeightedEdge.h" />
+    <ClInclude Include="..\..\include\MyException.h" />
+    <ClInclude Include="..\..\include\PyramidalSort.h" />
+    <ClInclude Include="..\..\include\SeparatedSet.h" />
     <ClInclude Include="..\..\include\TDheap.h" />
+    <ClInclude Include="..\..\include\Graph.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Graph.cpp" />
+    <ClCompile Include="..\..\src\SeparatedSet.cpp" />
+    <ClCompile Include="..\..\src\WeightedEdge.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

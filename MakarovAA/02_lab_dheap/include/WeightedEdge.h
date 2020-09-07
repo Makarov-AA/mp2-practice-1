@@ -35,8 +35,8 @@ public:
 	bool isIncidental(int vertex) const;
 	bool isAdjacent(WeightedEdge edge) const;
 
-	friend std::ostream& operator<<(std::ostream& out, const WeightedEdge edge);
-	friend std::istream& operator>>(std::istream& in, WeightedEdge edge);
+	friend std::ostream& operator<<(std::ostream& out, const WeightedEdge& edge);
+	friend std::istream& operator>>(std::istream& in, WeightedEdge& edge);
 
 };
 

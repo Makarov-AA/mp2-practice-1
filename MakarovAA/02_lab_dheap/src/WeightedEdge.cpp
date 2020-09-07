@@ -48,6 +48,7 @@ const WeightedEdge& WeightedEdge::operator=(const WeightedEdge& edge) {
 	startVertex = edge.startVertex;
 	endVertex = edge.endVertex;
 	weight = edge.weight;
+	return *this;
 }
 
 int WeightedEdge::getStartVertex() const {
@@ -84,22 +85,28 @@ bool WeightedEdge::isAdjacent(WeightedEdge edge) const {
 	return (edge.isIncidental(startVertex) || edge.isIncidental(endVertex));
 }
 
-std::ostream& operator<<(std::ostream& out, const WeightedEdge edge) {
+std::ostream& operator<<(std::ostream& out, const WeightedEdge& edge) {
 	out << "[(" << edge.startVertex << ", " << edge.endVertex << ") " << edge.weight << "]";
+	return out;
 }
 
-std::istream& operator>>(std::istream& in, WeightedEdge edge) {
+std::istream& operator>>(std::istream& in, WeightedEdge& edge) {
 	int iStartVertex;
 	int iEndVertex;
 	int iWeight;
 
+	std::cout << "Input start vertex" << std::endl;
 	in >> iStartVertex;
 	if (iStartVertex < 0) throw MyException("Incorrect start vertex");
+	std::cout << "Input end vertex" << std::endl;
 	in >> iEndVertex;
 	if (iEndVertex < 0) throw MyException("Incorrect end vertex");
+	std::cout << "Input weight" << std::endl;
 	in >> iWeight;
 
 	edge.startVertex = iStartVertex;
 	edge.endVertex = iEndVertex;
 	edge.weight = iWeight;
+
+	return in;
 }

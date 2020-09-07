@@ -148,7 +148,7 @@ int* Graph::getAdjMatrix() const{
 	return adjMatrix;
 }
 
-void Graph::printAdjacencyMatrix() const{
+void Graph::printAdjMatrix() const{
 	int* adjacencyMatrix = getAdjMatrix();
 
 	for (int i = 0; i < vertsCount; i++)
@@ -159,110 +159,6 @@ void Graph::printAdjacencyMatrix() const{
 	}
 
 	delete[] adjacencyMatrix;
-}
-
-Graph Graph::generateRandomDigraph(int _verticesCount, int _min, int _max){
-	if (_verticesCount < 0)
-		throw ExceptionIncorrectCountOfVertices(__LINE__, __FILE__);
-
-	if (_min > _max)
-		throw ExceptionIncorrectValueBoundaries(__LINE__, __FILE__);
-
-	double* adjacencyMatrix = new double[_verticesCount * _verticesCount];
-
-	for (int i = 0; i < _verticesCount * _verticesCount; i++)
-	{
-		if (rand() / (double)RAND_MAX < .5)
-			adjacencyMatrix[i] = 0;
-		else
-			adjacencyMatrix[i] = (_max - _min + 1) / (double)RAND_MAX * rand() + _min;
-	}
-
-	TGraph resultGraph(_verticesCount, adjacencyMatrix);
-	delete[] adjacencyMatrix;
-
-	return resultGraph;
-}
-
-TGraph TGraph::generateRandomUndirectedGraph(int _verticesCount, int _min, int _max){
-	if (_verticesCount < 0)
-		throw ExceptionIncorrectCountOfVertices(__LINE__, __FILE__);
-
-	if (_min > _max)
-		throw ExceptionIncorrectValueBoundaries(__LINE__, __FILE__);
-
-	double* adjacencyMatrix = new double[_verticesCount * _verticesCount];
-
-	for (int i = 0; i < _verticesCount; i++)
-		for (int j = 0; j < _verticesCount; j++)
-			adjacencyMatrix[i * _verticesCount + j]
-			= (j < i) ? 0 : (_max - _min + 1) / (double)RAND_MAX * rand() + _min;
-
-	TGraph resultGraph(_verticesCount, adjacencyMatrix);
-	delete[] adjacencyMatrix;
-
-	return resultGraph;
-}
-
-TGraph TGraph::generateRandomConnectedGraph(int _verticesCount, int _min, int _max){
-	if (_verticesCount < 0)
-		throw ExceptionIncorrectCountOfVertices(__LINE__, __FILE__);
-
-	if (_min > _max)
-		throw ExceptionIncorrectValueBoundaries(__LINE__, __FILE__);
-
-	double* adjacencyMatrix = new double[_verticesCount * _verticesCount];
-	for (int i = 0; i < _verticesCount * _verticesCount; i++)
-		adjacencyMatrix[i] = 0;
-
-	int _minEdgesCount = _verticesCount - 1;
-	int _maxEdgesCount = _verticesCount * (_verticesCount + 1) / 2;
-	int edgesCount = (_maxEdgesCount - _minEdgesCount) / (double)RAND_MAX * rand() + _minEdgesCount;
-
-	int* path = new int[_verticesCount];
-	for (int i = 0; i < _verticesCount; i++)
-		path[i] = i;
-	for (int i = _verticesCount - 1; i >= 0; i--)
-	{
-		int j = i / (double)RAND_MAX * rand();
-		int tmp = path[i];
-		path[i] = path[j];
-		path[j] = tmp;
-	}
-
-	for (int j = 0; j < _verticesCount - 1; j++)
-	{
-		int idx;
-		if (path[j] <= path[j + 1])
-			idx = path[j] * _verticesCount + path[j + 1];
-		else
-			idx = path[j + 1] * _verticesCount + path[j];
-		adjacencyMatrix[idx] = (_max - _min + 1) / (double)RAND_MAX * rand() + _min;
-	}
-	delete[] path;
-
-	int* indexes = new int[_maxEdgesCount - _minEdgesCount];
-	for (int i = 0, j = 0; i < _verticesCount * _verticesCount; i++)
-	{
-		if ((i / _verticesCount <= i % _verticesCount) && (adjacencyMatrix[i] == 0))
-			indexes[j++] = i;
-	}
-
-	for (int i = _maxEdgesCount - _minEdgesCount - 1; i >= _maxEdgesCount - edgesCount; i--)
-	{
-		int j = i / (double)RAND_MAX * rand();
-		int tmp = indexes[i];
-		indexes[i] = indexes[j];
-		indexes[j] = tmp;
-
-		adjacencyMatrix[indexes[i]] = (_max - _min + 1) / (double)RAND_MAX * rand() + _min;
-	}
-	delete[] indexes;
-
-	TGraph resultGraph(_verticesCount, adjacencyMatrix);
-	delete[] adjacencyMatrix;
-
-	return resultGraph;
 }
 
 Graph Graph::genRandomConnectedGraphNoLoops(int iVertsCount, int minValue, int maxValue){
@@ -306,106 +202,96 @@ Graph Graph::genRandomConnectedGraphNoLoops(int iVertsCount, int minValue, int m
 		if ((i / iVertsCount < i % iVertsCount) && (adjMatrix[i] == 0))
 			idxs[j++] = i;
 
-	for (int i = _maxEdgesCount - _minEdgesCount - 1; i >= _maxEdgesCount - edgesCount; i--)
+	for (int i = maxEdgesCount - minEdgesCount - 1; i >= maxEdgesCount - edgesCount; i--)
 	{
 		int j = i / (double)RAND_MAX * rand();
-		int tmp = indexes[i];
-		indexes[i] = indexes[j];
-		indexes[j] = tmp;
+		int tmp = idxs[i];
+		idxs[i] = idxs[j];
+		idxs[j] = tmp;
 
-		adjacencyMatrix[indexes[i]] = (_max - _min + 1) / (double)RAND_MAX * rand() + _min;
+		adjMatrix[idxs[i]] = (maxValue - minValue + 1) / (double)RAND_MAX * rand() + minValue;
 	}
-	delete[] indexes;
+	delete[] idxs;
 
-	TGraph resultGraph(_verticesCount, adjacencyMatrix);
-	delete[] adjacencyMatrix;
+	Graph resultGraph(iVertsCount, adjMatrix);
+	delete[] adjMatrix;
 
 	return resultGraph;
 }
 
-bool TGraph::operator==(const TGraph& _graph) const
-{
-	if ((verticesCount != _graph.verticesCount)
-		|| (edgesCount != _graph.edgesCount))
+bool Graph::operator==(const Graph& graph) const{
+	if ((vertsCount != graph.vertsCount)
+		|| (edgesCount != graph.edgesCount))
 		return false;
 
 	for (int i = 0; i < edgesCount; i++)
-		if (edges[i] != _graph.edges[i])
+		if (edges[i] != graph.edges[i])
 			return false;
 
 	return true;
 }
 
-bool TGraph::operator!=(const TGraph& _graph) const
-{
-	return !(*this == _graph);
-	/*
-	if ((verticesCount != _graph.verticesCount)
-		|| (edgesCount != _graph.edgesCount))
-	  return true;
-
-	for (int i = 0; i < edgesCount; i++)
-	  if (edges[i] != _graph.edges[i])
-		return true;
-
-	return false;
-	*/
+bool Graph::operator!=(const Graph& graph) const{
+	return !(*this == graph);
 }
 
-const TGraph& TGraph::operator=(const TGraph& _graph)
-{
-	if (*this == _graph)
+const Graph& Graph::operator=(const Graph& graph){
+	if (*this == graph)
 		return *this;
 
-	verticesCount = _graph.verticesCount;
-	edgesCount = _graph.edgesCount;
+	vertsCount = graph.vertsCount;
+	edgesCount = graph.edgesCount;
 
 	if (!edges)
 		delete[] edges;
-	edges = new TWeightedEdge[edgesCount];
+	edges = new WeightedEdge[edgesCount];
 
 	for (int i = 0; i < edgesCount; i++)
-		edges[i] = _graph.edges[i];
+		edges[i] = graph.edges[i];
 
 	return *this;
 }
 
-std::ostream& operator<<(std::ostream& out, const TGraph& _graph)
+std::ostream& operator<<(std::ostream& out, const Graph& graph)
 {
 	out << "Vertices: [ ";
-	for (int i = 0; i < _graph.verticesCount; i++)
-		out << i << " ";
+	for (int i = 0; i < graph.vertsCount; i++)
+		out << i << ", ";
 	out << "]" << std::endl;
 	out << "Edges: [ ";
-	for (int i = 0; i < _graph.edgesCount; i++)
-		out << _graph.edges[i] << " ";
+	for (int i = 0; i < graph.edgesCount; i++)
+		out << graph.edges[i] << " ";
 	out << "]" << std::endl;
 	return out;
 }
 
-std::istream& operator>>(std::istream& in, TGraph& _graph)
+std::istream& operator>>(std::istream& in, Graph& graph)
 {
-	int _verticesCount;
-	int _edgesCount;
-	TWeightedEdge* _edges;
+	int vertsCount;
+	int edgesCount;
+	WeightedEdge* edges;
 
 	std::cout << std::endl;
 	std::cout << "Enter count of vertices: ";
-	in >> _verticesCount;
+	in >> vertsCount;
+	if (vertsCount <= 0)
+		throw MyException("Incorrect vertexes count");
 	std::cout << "Enter count of edges: ";
-	in >> _edgesCount;
+	in >> edgesCount;
+	if (edgesCount <= 0)
+		throw MyException("Incorrect edges count");
 
-	_edges = new TWeightedEdge[_edgesCount];
+	edges = new WeightedEdge[edgesCount];
 	std::cout << std::endl;
 
-	for (int i = 0; i < _edgesCount; i++)
+	for (int i = 0; i < edgesCount; i++)
 	{
-		std::cout << " -----| Edge #" << i << " |----- " << std::endl;
-		in >> _edges[i];
+		std::cout << "Input edge ¹ " << i << std::endl;
+		in >> edges[i];
 		std::cout << std::endl;
 	}
 
-	_graph = TGraph(_verticesCount, _edgesCount, _edges);
-	delete[] _edges;
+	graph = Graph(vertsCount, edgesCount, edges);
+	delete[] edges;
 	return in;
 };

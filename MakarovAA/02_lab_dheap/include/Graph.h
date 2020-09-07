@@ -21,27 +21,24 @@ public:
 	int getEdgesCount() const;
 	WeightedEdge* getEdges() const;
 
-	bool isConnected()    const;
-	bool isUndirected()   const;
-	bool hasLoop()        const;
+	bool isConnected() const;
+	bool isUndirected() const;
+	bool hasLoop() const;
 
 	int connectComponentCount() const;
 
 	int* getAdjMatrix() const;
-	void  printAdjacencyMatrix() const;
+	void  printAdjMatrix() const;
 
-	static Graph generateRandomDigraph(int _verticesCount, int _min, int _max);
-	static Graph generateRandomUndirectedGraph(int _verticesCount, int _min, int _max);
-	static Graph generateRandomConnectedGraph(int _verticesCount, int _min, int _max);
 	static Graph genRandomConnectedGraphNoLoops(int iVertsCount, int minValue, int maxValue);
 
-	bool operator==(const TGraph& _graph) const;
-	bool operator!=(const TGraph& _graph) const;
+	bool operator==(const Graph& graph) const;
+	bool operator!=(const Graph& graph) const;
+	
+	const Graph& operator=(const Graph& graph);
 
-	const TGraph& operator=(const TGraph& _graph);
-
-	friend std::ostream& operator<<(std::ostream& out, const TGraph& _graph);
-	friend std::istream& operator>>(std::istream& in, TGraph& _graph);
+	friend std::ostream& operator<<(std::ostream& out, const Graph& graph);
+	friend std::istream& operator>>(std::istream& in, Graph& graph);
 };
 
 #endif

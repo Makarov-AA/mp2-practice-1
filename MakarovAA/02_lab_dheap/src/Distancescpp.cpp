@@ -1,17 +1,17 @@
 #include "Distances.h"
 
-Distances::Distances(int iStartVertex, int iVertsCount, double* iDist, int* iUp)
+Distances::Distances(int iStartVertex, int iVertsCount, int* iDist, int* iParentList)
 {
 	startVertex = iStartVertex;
 	vertsCount = iVertsCount;
 	dist = new double[vertsCount];
-	up = new int[vertsCount];
+	parentList = new int[vertsCount];
 
 	for (int i = 0; i < vertsCount; i++)
 		dist[i] = iDist[i];
 
 	for (int i = 0; i < vertsCount; i++)
-		up[i] = iUp[i];
+		parentList[i] = iParentList[i];
 }
 
 Distances::Distances(const Distances& distances)
@@ -19,19 +19,19 @@ Distances::Distances(const Distances& distances)
 	startVertex = distances.startVertex;
 	vertsCount = distances.vertsCount;
 	dist = new double[vertsCount];
-	up = new int[vertsCount];
+	parentList = new int[vertsCount];
 
 	for (int i = 0; i < vertsCount; i++)
 		dist[i] = distances.dist[i];
 
 	for (int i = 0; i < vertsCount; i++)
-		up[i] = distances.up[i];
+		parentList[i] = distances.parentList[i];
 }
 
 Distances::~Distances()
 {
 	if (dist) delete[] dist;
-	if (up) delete[] up;
+	if (parentList) delete[] parentList;
 }
 
 bool Distances::operator==(const Distances& distances) const
@@ -46,7 +46,7 @@ bool Distances::operator==(const Distances& distances) const
 			return false;
 
 	for (int i = 0; i < vertsCount; i++)
-		if (up[i] != distances.up[i])
+		if (parentList[i] != distances.parentList[i])
 			return false;
 
 	return true;
@@ -66,15 +66,15 @@ const Distances& Distances::operator=(const Distances& distances)
 	vertsCount = distances.vertsCount;
 
 	if (dist) delete[] dist;
-	if (up) delete[] up;
+	if (parentList) delete[] parentList;
 
 	dist = new double[vertsCount];
 	for (int i = 0; i < vertsCount; i++)
 		dist[i] = distances.dist[i];
 
-	up = new int[vertsCount];
+	parentList = new int[vertsCount];
 	for (int i = 0; i < vertsCount; i++)
-		up[i] = distances.up[i];
+		parentList[i] = distances.parentList[i];
 
 	return *this;
 }
@@ -89,19 +89,19 @@ void Distances::printPaths() const
 	{
 		if (i == startVertex) continue;
 		int idx = i * vertsCount + (vertsCount - 1);
-		for (int vertex = i; vertex != startVertex; vertex = up[vertex])
+		for (int vertex = i; vertex != startVertex; vertex = parentList[vertex])
 			paths[idx--] = vertex;
 		paths[idx] = startVertex;
 	}
 
-	for (int i = 0; i < verticesCount; i++)
+	for (int i = 0; i < vertsCount; i++)
 	{
 		if (i == startVertex) continue;
-		std::cout << "distance(" << startVertex << ", " << i << ") = " << dist[i] << " || ";
-		std::cout << "{" << startVertex << "}-->";
-		for (int j = 0; j < verticesCount - 1; j++)
+		std::cout << "distance(" << startVertex << ", " << i << ") = " << dist[i] << std::endl;
+		std::cout << "Path: " << "{" << startVertex << "}-->";
+		for (int j = 0; j < vertsCount - 1; j++)
 		{
-			int vertex = paths[i * verticesCount + j];
+			int vertex = paths[i * vertsCount + j];
 			if ((vertex >= 0) && (vertex != startVertex))
 				std::cout << "[" << vertex << "]-->";
 		}
@@ -111,22 +111,22 @@ void Distances::printPaths() const
 	delete[] paths;
 }
 
-std::ostream& operator<<(std::ostream& out, const TDistances& _distances)
+std::ostream& operator<<(std::ostream& out, const Distances& distances)
 {
-	out << "Start vertex: " << _distances.startVertex << std::endl;
-	out << "Count of vertices: " << _distances.verticesCount << std::endl;
+	out << "Start vertex: " << distances.startVertex << std::endl;
+	out << "Count of vertices: " << distances.vertsCount << std::endl;
 
-	out << "Dist: [ ";
-	for (int i = 0; i < _distances.verticesCount; i++)
-		out << _distances.dist[i] << " ";
+	out << "Distances: [ ";
+	for (int i = 0; i < distances.vertsCount; i++)
+		out << distances.dist[i] << " ";
 	out << "]" << std::endl;
 
-	out << "Up: [ ";
-	for (int i = 0; i < _distances.verticesCount; i++)
-		out << _distances.up[i] << " ";
+	out << "ParentList: [ ";
+	for (int i = 0; i < distances.vertsCount; i++)
+		out << distances.parentList[i] << " ";
 	out << "]" << std::endl << std::endl;
 
-	_distances.printPaths();
+	distances.printPaths();
 
 	return out;
 }

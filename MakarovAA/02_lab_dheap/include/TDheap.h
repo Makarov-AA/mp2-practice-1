@@ -30,6 +30,7 @@ public:
 	bool isFull() const;
 
 	int getCurrSize() const;
+	T* getDataPointer() const;
 
 private:
 	void swap(int a, int b);
@@ -137,6 +138,11 @@ void TDHeap<T>::swap(int a, int b) {
 	T tmp = data[a];
 	data[a] = data[b];
 	data[b] = tmp;
+}
+
+template <typename T>
+T* TDHeap<T>::getDataPointer() const {
+	return data;
 }
 
 template <typename T>

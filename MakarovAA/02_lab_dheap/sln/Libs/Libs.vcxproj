@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{0F9F93C7-2F22-4332-8ECA-0125207E7EC7}</ProjectGuid>
+    <ProjectGuid>{4C0CE7C1-0CE2-48E8-8C6E-750E5D5A011D}</ProjectGuid>
     <RootNamespace>Libs</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -70,14 +70,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -85,6 +77,14 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -120,6 +120,7 @@
     <ClInclude Include="..\..\include\Distances.h" />
     <ClInclude Include="..\..\include\Graph.h" />
     <ClInclude Include="..\..\include\KruskalAlgorithm.h" />
+    <ClInclude Include="..\..\include\Label.h" />
     <ClInclude Include="..\..\include\MyException.h" />
     <ClInclude Include="..\..\include\PyramidalSort.h" />
     <ClInclude Include="..\..\include\SeparatedSet.h" />
@@ -127,9 +128,11 @@
     <ClInclude Include="..\..\include\WeightedEdge.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\DijkstraAlgorithm.cpp" />
     <ClCompile Include="..\..\src\Distancescpp.cpp" />
     <ClCompile Include="..\..\src\Graph.cpp" />
     <ClCompile Include="..\..\src\KruskalAlgorithm.cpp" />
+    <ClCompile Include="..\..\src\Label.cpp" />
     <ClCompile Include="..\..\src\SeparatedSet.cpp" />
     <ClCompile Include="..\..\src\WeightedEdge.cpp" />
   </ItemGroup>

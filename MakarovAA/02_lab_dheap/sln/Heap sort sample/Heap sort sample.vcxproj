@@ -119,11 +119,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\sample\Pyramidal_sort_sample.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Libs\Libs.vcxproj">
-      <Project>{0f9f93c7-2f22-4332-8eca-0125207e7ec7}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

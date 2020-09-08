@@ -9,10 +9,10 @@ private:
 	int startVertex;
 	int vertsCount;
 	double* dist;
-	int* up;
+	int* parentList;
 
 public:
-	Distances(int iStartVertex, int iVertsCount, double* iDist, int* iUp);
+	Distances(int iStartVertex, int iVertsCount, int* iDist, int* iLongestPath);
 	Distances(const Distances& distances);
 	~Distances();
 

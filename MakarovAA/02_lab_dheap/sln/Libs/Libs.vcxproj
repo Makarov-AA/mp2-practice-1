@@ -129,7 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\DijkstraAlgorithm.cpp" />
-    <ClCompile Include="..\..\src\Distancescpp.cpp" />
+    <ClCompile Include="..\..\src\Distances.cpp" />
     <ClCompile Include="..\..\src\Graph.cpp" />
     <ClCompile Include="..\..\src\KruskalAlgorithm.cpp" />
     <ClCompile Include="..\..\src\Label.cpp" />

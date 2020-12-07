@@ -17,7 +17,7 @@ public:
 	TDHeap(const TDHeap<T>& heap);
 	~TDHeap();
 
-	void insert(T i_data);
+	void insert(const T& i_data);
 	void removeMinElm();
 
 	T getMinElm() const;
@@ -63,7 +63,7 @@ TDHeap<T>::~TDHeap() {
 }
 
 template <typename T>
-void TDHeap<T>::insert(T i_data) {
+void TDHeap<T>::insert(const T& i_data) {
 	if (isFull()) throw MyException("Heap is full");
 	data[currSize] = i_data;
 	shiftUp(currSize);

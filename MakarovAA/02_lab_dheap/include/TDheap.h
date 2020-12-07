@@ -9,10 +9,10 @@ private:
 	int d;
 	int maxSize;
 	int currSize;
-	
+	T* data;
 
 public:
-	T* data;
+	
 	TDHeap(int i_d, int i_maxSize, int i_currSize, T *i_data);
 	TDHeap(const TDHeap<T>& heap);
 	~TDHeap();

@@ -18,7 +18,9 @@ private:
 		trash,
 		incorrect
 	};
+
 	TList<unsigned int, double>* monoms;
+
 	Symbol Type(const char c);
 	bool Check(std::string&);
 
@@ -42,6 +44,8 @@ public:
 	Polynom operator+(const double) const;
 	Polynom operator-(const double) const;
 	Polynom operator*(const double) const;
+
+	bool operator == (const Polynom& polynom) const;
 
 	friend std::ostream& operator<<(std::ostream& out, const Polynom monom);
 };

@@ -14,10 +14,11 @@ int main()
 			std::cout << "Insert 1st polynom" << std::endl;
 			std::string s1;
 			std::getline(std::cin, s1);
+			Polynom p1(s1);
 			std::cout << "Insert 2nd polynom" << std::endl;
 			std::string s2;
 			std::getline(std::cin, s2);
-			Polynom p1(s1), p2(s2);
+			Polynom p2(s2);
 			std::cout << "1st polynom:" << std::endl << p1 << std::endl;
 			std::cout << "2nd polynom:" << std::endl << p2 << std::endl;
 			std::cout << "Insert operation (+, -, *)" << std::endl;

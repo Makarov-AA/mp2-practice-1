@@ -42,6 +42,8 @@ public:
 	TNode<TKey, TData>* Current();
 	TNode<TKey, TData>* Next();
 
+	bool operator == (const TList& monom) const;
+
 	template <typename TKey, typename TData>
 	friend std::ostream& operator<<(std::ostream& out, const TList<TKey, TData>& list);
 };
@@ -158,7 +160,6 @@ template <class TKey, class TData>
 void TList<TKey, TData>::InsertEnd(TNode<TKey, TData>& node)
 {
 	InsertEnd(node.key, node.data);
-	return;
 }
 
 template <class TKey, class TData>
@@ -188,7 +189,6 @@ template <class TKey, class TData>
 void TList<TKey, TData>::InsertBefore(TKey search_key, TNode<TKey, TData>& node)
 {
 	InsertBefore(search_key, node->key, node->data);
-	return;
 }
 
 template <class TKey, class TData>
@@ -309,6 +309,31 @@ template <class TKey, class TData>
 TNode<TKey, TData>* TList<TKey, TData>::Next()
 {
 	return pNext;
+}
+
+template <class TKey, class TData>
+bool TList<TKey, TData>::operator==(const TList<TKey, TData>& i_list) const
+{
+	if (IsEmpty())
+	{
+		if (i_list.IsEmpty())
+			return true;
+		return false;
+	}
+	else if (i_list.IsEmpty())
+			return false;
+	TList<TKey, TData> list1(*this);
+	TList<TKey, TData> list2(i_list);
+	list1.Reset();
+	list2.Reset();
+	while (!list1.IsEnded() || !list2.IsEnded())
+	{
+		if (list1.Current() != list2.Current())
+			return false;
+		list1.MoveNext();
+		list2.MoveNext();
+	}
+	return true;
 }
 
 template <typename TKey, typename TData>

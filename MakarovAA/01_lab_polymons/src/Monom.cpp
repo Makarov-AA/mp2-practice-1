@@ -7,7 +7,7 @@ Monom::TNode(unsigned int iKey, double iData) : key(iKey), pNext(nullptr), data(
 
 const Monom& Monom::operator = (const Monom& monom)
 {
-	if (&monom == this) return *this;
+	if (monom == *this) return *this;
 	data = monom.data;
 	key = monom.key;
 	return *this;
@@ -27,9 +27,10 @@ Monom Monom::operator - (const Monom& monom)
 
 Monom Monom::operator * (const Monom& monom)
 {
-	if ((key % 10 + monom.key % 10) > 9) throw "Out of degree's size";
-	if (((key % 100) / 10 + (monom.key % 100) / 10) > 9) throw "Out of degree's size";
-	if ((key / 100 + monom.key / 100) > 9) throw "Out of degree's size";
+	if (((key % 10 + monom.key % 10) > 9) || 
+		(((key % 100) / 10 + (monom.key % 100) / 10) > 9) || 
+		((key / 100 + monom.key / 100) > 9)) 
+		throw "Out of degree's size";
 	return Monom(key + monom.key, data * monom.data);
 }
 

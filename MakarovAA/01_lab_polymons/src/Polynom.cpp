@@ -29,6 +29,13 @@ bool Polynom::Check(std::string &expr)
 			i++;
 		}
 	}
+	for (int i = 0; i < expr.size(); i++)
+	{
+		if (Type(expr[i]) == Symbol::incorrect)
+			return false;
+		if (Type(expr[i]) == Symbol::trash)
+			expr.erase(i, 1);
+	}
 	if (Type(expr[0]) <= Symbol::plus_minus)//Проверка первого символа
 	{
 		if ((Type(expr[0]) != Symbol::plus_minus))
@@ -40,17 +47,24 @@ bool Polynom::Check(std::string &expr)
 		switch (Type(expr[i]))
 		{
 		case Symbol::plus_minus: //проверка, что до и после + или - стоит переменная или цифра
-			if (Type(expr[i - 1]) > Symbol::number || Type(expr[i + 1]) > Symbol::number)
-				return false;
+			if (Type(expr[i - 1]) > Symbol::number)
+				if (i + 1 < expr.size())
+					if (Type(expr[i + 1]) > Symbol::number)
+						return false;
 			break;
 		case Symbol::degreeSign: //проверка, что степень представлена единственным числом
-			if (Type(expr[i - 1]) != Symbol::variable && Type(expr[i + 1]) != Symbol::number)
-				if (Type(expr[i + 2]) == Symbol::number || Type(expr[i + 2]) == Symbol::coma)
+			if (Type(expr[i - 1]) != Symbol::variable)
+				return false;
+			if (i + 1 >= expr.size() || Type(expr[i + 1]) != Symbol::number)
+				return false;
+			if (i + 2 < expr.size())
+				if (Type(expr[i + 2]) != Symbol::variable && Type(expr[i + 2]) != Symbol::plus_minus)
 					return false;
-				else return false;
 			break;
 		case Symbol::coma: //проверка, что запятая (точка) разделяет два числа
-			if (Type(expr[i - 1]) != Symbol::number || Type(expr[i + 1]) != Symbol::number)
+			if (Type(expr[i - 1]) != Symbol::number)
+				return false;
+			if (i + 1 >= expr.size() || Type(expr[i + 1]) != Symbol::number)
 				return false;
 			break;
 		}
@@ -170,7 +184,7 @@ Polynom::~Polynom()
 
 const Polynom& Polynom::operator=(const Polynom& polynom)
 {
-	if (&polynom == this) return *this;
+	if (polynom == *this) return *this;
 	delete monoms;
 	monoms = new TList<unsigned int, double>(*polynom.monoms);
 	return *this;
@@ -226,7 +240,7 @@ Polynom Polynom::operator-() const
 	minus.monoms->Reset();
 	while (!minus.monoms->IsEnded())
 	{
-		minus.monoms->Current()->data *= -1;
+		minus.monoms->Current()->data *= -1.;
 		minus.monoms->MoveNext();
 	}
 	return minus;
@@ -286,7 +300,7 @@ Polynom Polynom::operator+(const Monom& monom) const
 		sum.monoms->InsertBefore(sum.monoms->Current()->key, monom.key, monom.data);
 		return sum;
 	}
-
+	return sum;
 }
 
 Polynom Polynom::operator-(const Monom& monom) const
@@ -332,6 +346,11 @@ Polynom Polynom::operator*(const double c) const
 		mlp.monoms->MoveNext();
 	}
 	return mlp;
+}
+
+bool Polynom::operator==(const Polynom& polynom) const
+{
+	return *monoms == *(polynom.monoms);
 }
 
 std::ostream& operator<<(std::ostream& out, const Polynom polynom)
